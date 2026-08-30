@@ -2,22 +2,238 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
+/* =============================================
+   CSS CUSTOM PROPERTIES - THEME TOKENS
+   ============================================= */
+:root {
   --line-color: #e5e7eb;
+
+  /* Blue-Purple gradient palette */
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --primary-dark: #4f46e5;
+  --secondary: #8b5cf6;
+  --secondary-light: #a78bfa;
+  --accent: #06b6d4;
+
+  /* Glow colors */
+  --glow-primary: rgba(99, 102, 241, 0.35);
+  --glow-secondary: rgba(139, 92, 246, 0.35);
+  --glow-accent: rgba(6, 182, 212, 0.25);
+
+  /* Background mesh orbs */
+  --orb-1: radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+  --orb-2: radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.12) 0%, transparent 60%);
+  --orb-3: radial-gradient(ellipse at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 60%);
 }
 
 html.dark {
-  --line-color: rgba(255, 255, 255, 0.2);
+  --line-color: rgba(255, 255, 255, 0.15);
 }
 
+/* =============================================
+   ANIMATED GRADIENT BACKGROUND MESH
+   ============================================= */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(139, 92, 246, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 85%, rgba(167, 139, 250, 0.08) 0%, transparent 50%);
+  animation: meshShift 20s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.dark body::before {
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(99, 102, 241, 0.20) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 85%, rgba(139, 92, 246, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 15%, rgba(6, 182, 212, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 85%, rgba(167, 139, 250, 0.12) 0%, transparent 50%);
+}
+
+@keyframes meshShift {
+  0%   { opacity: 0.8; transform: scale(1) rotate(0deg); }
+  50%  { opacity: 1;   transform: scale(1.05) rotate(1deg); }
+  100% { opacity: 0.8; transform: scale(1) rotate(-1deg); }
+}
+
+/* =============================================
+   CUSTOM SCROLLBAR
+   ============================================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366f1, #8b5cf6);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4f46e5, #7c3aed);
+}
+
+/* =============================================
+   GRADIENT TEXT UTILITY
+   ============================================= */
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-warm {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =============================================
+   GLASSMORPHISM CARD
+   ============================================= */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.08);
+}
+
+.dark .glass-card {
+  background: rgba(30, 27, 75, 0.4);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+}
+
+/* Glow hover effect for cards */
+.glow-card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glow-card:hover {
+  box-shadow: 0 0 30px var(--glow-primary), 0 16px 40px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+}
+
+.dark .glow-card:hover {
+  box-shadow: 0 0 40px var(--glow-primary), 0 20px 50px rgba(0,0,0,0.3);
+}
+
+/* =============================================
+   TYPEWRITER ANIMATION (for speech bubble)
+   ============================================= */
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50%      { border-color: #6366f1; }
+}
+
+/* =============================================
+   MASCOT ANIMATIONS
+   ============================================= */
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes mascotBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  30%       { transform: translateY(-14px) scale(1.03); }
+  60%       { transform: translateY(-6px) scale(0.98); }
+}
+
+@keyframes mascotWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20%       { transform: rotate(-8deg); }
+  40%       { transform: rotate(8deg); }
+  60%       { transform: rotate(-4deg); }
+  80%       { transform: rotate(4deg); }
+}
+
+@keyframes antennaPulse {
+  0%, 100% { opacity: 1; r: 3px; }
+  50%       { opacity: 0.5; r: 5px; }
+}
+
+@keyframes speechFadeIn {
+  from { opacity: 0; transform: scale(0.8) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.6)); }
+  50%       { filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.9)); }
+}
+
+.mascot-float {
+  animation: mascotFloat 3s ease-in-out infinite;
+}
+
+.mascot-glow {
+  animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+/* =============================================
+   IN-DEVELOPMENT BADGE ANIMATIONS
+   ============================================= */
+@keyframes devBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes progressShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.dev-badge {
+  animation: devBlink 1.8s ease-in-out infinite;
+}
+
+.progress-bar-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.8) 0%,
+    rgba(139, 92, 246, 1) 40%,
+    rgba(6, 182, 212, 0.9) 60%,
+    rgba(99, 102, 241, 0.8) 100%
+  );
+  background-size: 200% auto;
+  animation: progressShimmer 2.5s linear infinite;
+}
+
+/* =============================================
+   SECTION TRANSITION FADE-IN UTILITY
+   ============================================= */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* =============================================
+   EXISTING UTILITIES (PRESERVED)
+   ============================================= */
 .borderBlack {
   @apply border border-black/10;
 }
+
 .bg-1 {
-  /* --something: 2px !important; */
-  /* inset:0; */
-  /* padding:var(--something); */
-  /* opacity:var(--something-opa); */
   background: linear-gradient(
       135deg,
       #0285c7aa 5%,
@@ -50,22 +266,9 @@ html.dark {
   mask-composite: exclude;
 }
 
-/* CSS */
 .blur-background {
-  backdrop-filter: blur(8px); /* Menambahkan efek blur pada latar belakang */
-  background: rgba(0, 0, 0, 0.5); /* Menambahkan latar belakang transparan */
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000; /* Memastikan z-index lebih tinggi dari elemen lain */
-}
-
-/* CSS */
-.modal-overlay {
-  /* backdrop-filter: blur(1px);
-  background: rgba(0, 0, 0, 0.5); */
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
   position: fixed;
   top: 0;
   left: 0;
@@ -74,14 +277,22 @@ html.dark {
   z-index: 1000;
 }
 
-/* CSS */
-.image-modal-overlay {
-  backdrop-filter: blur(8px); /* Menambahkan efek blur pada latar belakang */
-  background: rgba(0, 0, 0, 0.5); /* Menambahkan latar belakang transparan */
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1500; /* Memastikan z-index lebih tinggi dari elemen lain */
+  z-index: 1000;
+}
+
+.image-modal-overlay {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1500;
 }

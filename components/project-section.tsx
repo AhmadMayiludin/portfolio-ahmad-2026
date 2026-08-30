@@ -1,25 +1,16 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { projectsData } from "@/lib/data";
 import BurstBload2 from "./burst-bload-2";
 import { useSectionInView } from "@/lib/hooks";
 import { useInView } from "react-intersection-observer";
-import { FaGithub, FaLink, FaArrowDown } from "react-icons/fa";
+import { FaArrowDown, FaGithub } from "react-icons/fa";
 import { BiLinkExternal } from "react-icons/bi";
 import SectionHeading from "./section-heading";
 
-interface Project {
-  title: string;
-  description: string;
-  tech: string[];
-  image: string;
-  screenshots: string[];
-  features: string[];
-  languages: string[];
-  demoUrl?: string;
-  githubUrl?: string;
-}
+type Project = (typeof projectsData)[number];
 
 const ProjectSection: React.FC = () => {
   const { ref } = useSectionInView("Projects", 0.5);
@@ -27,36 +18,29 @@ const ProjectSection: React.FC = () => {
     triggerOnce: true,
   });
   const [showAllProjects, setShowAllProjects] = useState(false);
-
-  const toggleShowAllProjects = () => {
-    setShowAllProjects(!showAllProjects);
-  };
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
   const displayedProjects = showAllProjects
     ? projectsData
     : projectsData.slice(0, 4);
 
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  const handleProjectClick = (project: any) => {
+  const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
     document.body.style.overflow = "hidden";
   };
 
   const handleCloseModal = () => {
     setSelectedProject(null);
+    setZoomedImage(null);
     document.body.style.overflow = "auto";
   };
 
-  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
-
-  const handleScreenshotClick = (screenshot: string) => {
-    setZoomedImage(screenshot);
-  };
-
-  const handleCloseZoomedImage = () => {
-    setZoomedImage(null);
-  };
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
 
   return (
     <motion.section
@@ -64,63 +48,67 @@ const ProjectSection: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="py-12 px-10 scroll-mt-28 mb-28"
+      className="mb-28 w-full scroll-mt-28"
       ref={ref}
-      style={{ padding: "0 8%" }}
     >
-      <div ref={sectionRef} className="container mx-auto">
+      <div ref={sectionRef} className="mx-auto w-full max-w-6xl px-4">
         <div className="flex justify-center mb-2">
-          <SectionHeading>🚀 Projects</SectionHeading>
+          <SectionHeading>Projects</SectionHeading>
           <BurstBload2 />
         </div>
+        <p className="mx-auto mb-8 max-w-2xl text-center leading-relaxed text-gray-700 dark:text-white/75">
+          Project pilihan dari GitHub dan folder lokal: aplikasi operasional,
+          dashboard, mobile app, UI/UX, data, dan computer vision dengan fitur
+          yang bisa dinilai langsung.
+        </p>
 
-        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div className="mt-5 grid grid-cols-1 gap-8 md:grid-cols-2">
           {displayedProjects.map((project, index) => (
-            <motion.div
-              key={index}
+            <motion.article
+              key={project.title}
               onClick={() => handleProjectClick(project)}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.9 }}
-              transition={{ duration: 0.6, delay: 0.1 * index }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              style={{ cursor: "pointer" }}
-              className="bg-white dark:bg-[#232D3F] text-black  border-white dark:border-[#232D3F] border-solid border-8 rounded-xl shadow-lg hover:shadow-xl overflow-hidden"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.96 }}
+              transition={{ duration: 0.45, delay: 0.08 * index }}
+              whileHover={{ y: -4 }}
+              className="cursor-pointer overflow-hidden rounded-lg border border-black/5 bg-white text-black shadow-lg transition hover:shadow-xl dark:border-white/10 dark:bg-[#232D3F]"
             >
               <img
                 src={project.image}
                 alt={project.title}
-                className="w-full h-49 object-cover"
-                width="100%" // Atur lebar sesuai kebutuhan atau gunakan persentase
-                height="196" // Atur tinggi sesuai kebutuhan
+                className="h-56 w-full bg-gray-100 object-cover dark:bg-white/5"
+                width="640"
+                height="224"
               />
-              <div className="p-4">
-                <h3 className="text-xl font-semibold mb-2 dark:text-white">
+              <div className="p-5">
+                <h3 className="mb-2 text-xl font-semibold dark:text-white">
                   {project.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-200 mb-4 text-justify">
+                <p className="mb-4 leading-relaxed text-gray-600 dark:text-gray-200">
                   {project.description}
                 </p>
-                <div className="flex justify-between items-end">
-                  <div className="flex space-x-2">
+                <div className="flex items-end justify-between gap-4">
+                  <div className="flex flex-wrap gap-2">
                     {project.tech.map((tech, techIndex) => (
                       <img
-                        key={techIndex}
+                        key={`${project.title}-${techIndex}`}
                         src={tech}
-                        alt={`Tech ${techIndex}`}
-                        className="h-6"
+                        alt=""
+                        className="h-6 w-6 object-contain"
                         width="24"
                         height="24"
                       />
                     ))}
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex gap-3">
                     {project.demoUrl && (
                       <a
                         href={project.demoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`text-gray-600 dark:text-gray-200 hover:underline text-xl`}
+                        onClick={(event) => event.stopPropagation()}
+                        className="text-xl text-gray-600 hover:text-gray-950 dark:text-gray-200 dark:hover:text-white"
+                        aria-label={`Buka demo ${project.title}`}
                       >
                         <BiLinkExternal />
                       </a>
@@ -130,7 +118,9 @@ const ProjectSection: React.FC = () => {
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`text-gray-600 dark:text-gray-200 dark:hover:text-gray-100 hover:text-gray-700 text-xl`}
+                        onClick={(event) => event.stopPropagation()}
+                        className="text-xl text-gray-600 hover:text-gray-950 dark:text-gray-200 dark:hover:text-white"
+                        aria-label={`Buka repository ${project.title}`}
                       >
                         <FaGithub />
                       </a>
@@ -138,53 +128,57 @@ const ProjectSection: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
+
         {!showAllProjects && (
           <div className="flex justify-center mt-10">
             <button
-              onClick={toggleShowAllProjects}
-              className="group flex items-center justify-center gap-2 h-[3rem] w-[8rem] bg-gray-900 text-white rounded-md outline-none transition-all focus:scale-110 hover:scale-110 hover:bg-gray-950 active:scale-105 dark:bg-white dark:bg-opacity-10 disabled:scale-100 disabled:bg-opacity-65"
+              onClick={() => setShowAllProjects(true)}
+              className="group flex min-h-[3rem] items-center justify-center gap-2 rounded-md bg-gray-900 px-5 text-white outline-none transition-all hover:scale-105 hover:bg-gray-950 focus:scale-105 active:scale-100 dark:bg-white dark:bg-opacity-10"
             >
-              Lihat Lainnya 
-              <FaArrowDown className="text-xs opacity-70 transition-all" />{" "}
+              Lihat Lainnya
+              <FaArrowDown className="text-xs opacity-70 transition-all" />
             </button>
           </div>
         )}
       </div>
-      {/* Modal for detailed description */}
+
       {selectedProject && (
-        <div className="modal-overlay flex items-center justify-center">
+        <div className="modal-overlay">
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            onClick={handleCloseModal}
           >
-            {" "}
-            <div className="bg-white dark:bg-[#232D3F] p-8 max-w-[900px] w-full mx-4 my-8 rounded-xl shadow-lg relative overflow-y-scroll max-h-[80vh]">
+            <div
+              className="relative mx-auto max-h-[85vh] w-full max-w-[900px] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl dark:bg-[#232D3F] sm:p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={handleCloseModal}
-                className="absolute top-4 right-4 text-gray-600 dark:text-gray-200 hover:text-gray-700"
+                className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition hover:bg-gray-200 hover:text-gray-900 dark:bg-white/10 dark:text-gray-200 dark:hover:bg-white/20 dark:hover:text-white"
+                aria-label="Tutup detail project"
               >
-                <span className="text-xl">&times;</span>
+                <span className="text-2xl leading-none">&times;</span>
               </button>
-              <h2 className="text-xl font-semibold mb-2 dark:text-white">
+              <h2 className="mb-2 pr-8 text-2xl font-bold dark:text-white">
                 {selectedProject.title}
               </h2>
-              <div className=" relative overflow-y-auto">
-                <p className="modal-content text-gray-600 dark:text-gray-200 mb-4 text-justify max-h-60vh">
-                  {selectedProject.description}
-                </p>
-              </div>
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2 dark:text-white">
-                 Fitur Utama:
+              <p className="mb-5 leading-relaxed text-gray-600 dark:text-gray-200">
+                {selectedProject.description}
+              </p>
+
+              <div className="mb-5">
+                <h3 className="mb-2 text-lg font-semibold dark:text-white">
+                  Fitur Utama
                 </h3>
-                <ul className="list-disc list-inside">
-                  {selectedProject.features.map((feature, index) => (
+                <ul className="list-disc space-y-2 pl-5">
+                  {selectedProject.features.map((feature) => (
                     <li
-                      key={index}
+                      key={feature}
                       className="text-gray-600 dark:text-gray-200"
                     >
                       {feature}
@@ -192,58 +186,64 @@ const ProjectSection: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              <h4 className="text-lg font-semibold mb-2 dark:text-white">
-                Klik gambar untuk memperbesar
+
+              <h4 className="mb-2 text-lg font-semibold dark:text-white">
+                Galeri Project
               </h4>
-              <div className="flex space-x-4 flex-wrap mb-4">
+              <div className="mb-5 flex flex-wrap gap-4">
                 {selectedProject.screenshots.map((screenshot, index) => (
                   <img
-                    key={index}
+                    key={`${selectedProject.title}-${index}`}
                     src={screenshot}
-                    alt={`Screenshot ${index + 1}`}
-                    className="w-32 h-32 object-cover rounded-md cursor-pointer mb-4"
-                    onClick={() => handleScreenshotClick(screenshot)}
+                    alt={`${selectedProject.title} screenshot ${index + 1}`}
+                    className="h-28 w-36 cursor-pointer rounded-lg bg-gray-100 object-cover shadow-sm transition hover:scale-105 dark:bg-white/5"
+                    onClick={() => setZoomedImage(screenshot)}
                   />
                 ))}
               </div>
-              <h4 className="text-lg font-semibold mb-2 dark:text-white">
+
+              <h4 className="mb-2 text-lg font-semibold dark:text-white">
                 Bahasa dan Tools
               </h4>
-              <div className="flex justify-between items-end">
-                <div className="flex space-x-2">
-                  {selectedProject.languages.map((language, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-gray-200 text-gray-800 rounded-full text-sm"
-                    >
-                      {language}
-                    </span>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-2">
+                {selectedProject.languages.map((language) => (
+                  <span
+                    key={language}
+                    className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 dark:bg-white/10 dark:text-gray-200"
+                  >
+                    {language}
+                  </span>
+                ))}
               </div>
             </div>
           </motion.div>
         </div>
       )}
+
       {zoomedImage && (
-        <div className="image-modal-overlay flex items-center justify-center">
+        <div className="image-modal-overlay">
           <motion.div
-            className="fixed inset-0 flex items-center justify-center z-50"
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
+            onClick={() => setZoomedImage(null)}
           >
-            <div className="bg-white dark:bg-[#192D3E] p-8 max-w-[1000px] w-full mx-4 my-8 rounded-xl shadow-lg relative">
+            <div
+              className="relative mx-auto max-w-[1000px] w-full rounded-2xl bg-white p-4 shadow-2xl dark:bg-[#192D3E] sm:p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
-                onClick={handleCloseZoomedImage}
-                className="absolute top-4 right-4 text-gray-600 dark:text-gray-200 hover:text-gray-700"
+                onClick={() => setZoomedImage(null)}
+                className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition hover:bg-gray-200 hover:text-gray-900 dark:bg-white/10 dark:text-gray-200 dark:hover:bg-white/20 dark:hover:text-white"
+                aria-label="Tutup gambar"
               >
-                <span className="text-xl">&times;</span>
+                <span className="text-2xl leading-none">&times;</span>
               </button>
-              <div className="w-full h-[600px] mb-4 overflow-hidden">
+              <div className="flex max-h-[75vh] w-full items-center justify-center overflow-hidden pt-6">
                 <img
                   src={zoomedImage}
-                  alt="Zoomed Screenshot"
-                  className="max-w-full max-h-full object-contain"
+                  alt="Screenshot project"
+                  className="max-h-[70vh] max-w-full rounded-lg object-contain"
                 />
               </div>
             </div>

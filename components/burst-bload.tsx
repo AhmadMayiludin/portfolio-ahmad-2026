@@ -13,7 +13,7 @@ export default function BurstBload() {
           repeat: Infinity,
           duration: 1.2,
         }}
-        alt="about shape bayu maulana ikhsan"
+        alt="about decorative shape Ahmad Mayiludin"
         className="-z-10 top-0 right-4 md:w-auto w-6"
         width="24"
         height="24"

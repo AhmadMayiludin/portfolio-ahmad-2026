@@ -31,7 +31,7 @@ const MaintenanceMode: React.FC = () => {
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
             </svg>
             <span className="dark:text-white">
-              bayu.maulanaikhsan123@gmail.com
+              if23.ahmadmayiludin@mhs.ubpkarawang.ac.id
             </span>
           </a>
         </div>

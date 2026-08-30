@@ -12,40 +12,39 @@ export default function About() {
   return (
     <motion.section
       ref={ref}
-      className="mb-28 max-w-[45rem] text-center leading-8 sm:mb-40 scroll-mt-28"
+      className="mb-28 max-w-[48rem] scroll-mt-28 text-center leading-8 sm:mb-40"
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.175 }}
       id="about"
     >
       <div className="flex justify-center">
-        <SectionHeading>👨‍💻 About Me</SectionHeading>
+        <SectionHeading>About Me</SectionHeading>
         <BurstBload />
       </div>
       <p className="mb-4">
-        Halo, saya <span className="font-medium">Ahmad Mayiludin!</span> Saat ini saya adalah mahasiswa semester 6 di{" "}
-        <span className="font-medium">Universitas Buana Perjuangan Karawang</span> dengan IPK{" "}
-        <span className="font-medium">3.77</span>. Saya adalah seorang pengembang yang aktif dan
-        berdedikasi, baik dalam akademik maupun pengembangan solusi teknologi di dunia nyata.
+        Halo, saya <span className="font-medium">Ahmad Mayiludin</span>,
+        mahasiswa Universitas Buana Perjuangan Karawang dengan IPK{" "}
+        <span className="font-medium">3.77</span>. Saya fokus membangun produk
+        digital yang dekat dengan kebutuhan operasional: dashboard bisnis,
+        aplikasi mobile internal, sistem administrasi, dan otomasi berbasis
+        data.
       </p>
 
-      <p className="mb-2 font-medium">Fokus Utama:</p>
-      <ul className="mb-4 text-left space-y-1">
-        <li>
-          🖥️ <span className="font-medium">Full Stack & Mobile:</span> Spesialis Laravel & Ionic Angular.
-        </li>
-        <li>
-          🔐 <span className="font-medium">Cyber Security:</span> Kontributor proyek Open Source keamanan siber.
-        </li>
-        <li>
-          🤖 <span className="font-medium">Future Tech:</span> Implementasi Computer Vision & UI/UX Design.
-        </li>
-      </ul>
+      <p className="mb-4">
+        Stack utama saya mencakup{" "}
+        <span className="font-medium">Laravel, PHP, MySQL, React, Ionic Angular,
+        TypeScript, Tailwind CSS, Python, OpenCV,</span> dan desain UI/UX
+        menggunakan Figma. Saya terbiasa memecah kebutuhan menjadi fitur,
+        membuat alur pengguna, mengintegrasikan API, serta menyiapkan tampilan
+        yang mudah dipakai.
+      </p>
 
       <p>
-        Selain fokus pada teknis, saya memiliki pengalaman organisasi di kampus yang telah membentuk
-        karakter kepemimpinan dan kerjasama tim saya. Saya selalu terbuka untuk tantangan baru dan
-        kolaborasi inovatif di dunia digital.
+        Di luar teknis, pengalaman organisasi dan kepanitiaan membantu saya
+        lebih rapi dalam komunikasi, koordinasi, dan menyelesaikan pekerjaan
+        bersama tim. Saat ini saya siap untuk role junior web/mobile developer,
+        frontend developer, backend developer, atau software engineer intern.
       </p>
     </motion.section>
   );

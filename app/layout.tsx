@@ -1,6 +1,5 @@
 import Header from "@/components/header";
 import "./globals.css";
-import { Inter } from "next/font/google";
 import ActiveSectionContextProvider from "@/context/active-section-context";
 import Footer from "@/components/footer";
 import ThemeSwitch from "@/components/theme-switch";
@@ -8,92 +7,76 @@ import ThemeContextProvider from "@/context/theme-context";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata } from "next";
+import AMAIMascot from "@/components/amai-mascot";
 
-const inter = Inter({ subsets: ["latin"] });
-const baseUrlMeta = `${new URL("https://bayumaulanaikhsan.my.id/")}`;
-export const metadata = {
-  metadataBase: new URL("https://bayumaulanaikhsan.my.id/"),
-  title: "Ahmad Mayiludin | Portfolio",
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: "Ahmad Mayiludin | Full Stack & Mobile Developer",
   description:
-    "Bayu Maulana Ikhsan is a web developer with 2 years of experience.",
-  author: "Bayu Maulana Ikhsan",
-  subject: "Web Development",
-  copyright: "© Bayu Maulana Ikhsan",
-  keywords: [
-    "Bayu Maulana Ikhsan",
-    "Next.js",
-    "React",
-    "JavaScript",
-    "Laravel",
-    "Codeigniter",
-    "PHP",
-    "HTML",
-    "Web developer",
-    "coding services",
-    "website development services",
-    "IT assignment services",
-    "Information Systems",
-    "Jasa buat website",
-    "joki tugas IT",
-    "Joki buat website",
-    "Joki Coding",
-    "Joki coding jogja",
-    "joki murah",
+    "Portfolio Ahmad Mayiludin, junior full stack dan mobile developer yang membangun aplikasi web, dashboard operasional, aplikasi mobile Ionic Angular, dan project Computer Vision.",
+  authors: [
+    {
+      name: "Ahmad Mayiludin",
+      url: "https://github.com/AhmadMayiludin",
+    },
   ],
-  generator: "Next.js",
-  applicationName: "Bayu Maulana Ikhsan | Portfolio",
-  referrer: "origin-when-cross-origin",
-  colorScheme: "dark",
-  creator: "Bayu Maulana Ikhsan",
-  publisher: "Bayu Maulana Ikhsan",
-  language: "id",
-  geo: {
-    country: "ID",
-    placename: "Yogyakarta",
-  },
+  creator: "Ahmad Mayiludin",
+  publisher: "Ahmad Mayiludin",
+  keywords: [
+    "Ahmad Mayiludin",
+    "Portfolio Developer",
+    "Full Stack Developer",
+    "Mobile Developer",
+    "Frontend Developer",
+    "Backend Developer",
+    "Laravel",
+    "React",
+    "Ionic Angular",
+    "TypeScript",
+    "PHP",
+    "MySQL",
+    "Python",
+    "Computer Vision",
+  ],
   openGraph: {
+    title: "Ahmad Mayiludin | Portfolio Developer",
+    description:
+      "Project portfolio web, mobile, dashboard bisnis, UI/UX, data mining, dan Computer Vision.",
+    url: siteUrl,
+    siteName: "Ahmad Mayiludin Portfolio",
+    locale: "id_ID",
+    type: "website",
     images: [
       {
-        url: `${baseUrlMeta}images/profile_2.jpg`,
-        alt: "Bayu Maulana Ikhsan",
-      },
-      {
-        url: `${baseUrlMeta}images/project/cekresi/1.png`,
-        alt: "Portofolio Cek Resi CGN",
-      },
-      {
-        url: `${baseUrlMeta}images/project/ikanme/1.png`,
-        alt: "Portofolio Ikan Me",
+        url: "/images/profile_2.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Ahmad Mayiludin Portfolio",
       },
     ],
-    description:
-      "Bayu Maulana Ikhsan is a web developer with 2 years of experience.",
-    author: "Bayu Maulana Ikhsan",
   },
-  basic: {
-    title: "Bayu Maulana Ikhsan - Fullstack Engineer",
-    type: "website",
-    image: {
-      url: `${baseUrlMeta}images/profile_2.jpg`,
-      alt: "Bayu Maulana Ikhsan",
-    },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ahmad Mayiludin | Portfolio Developer",
+    description:
+      "Portfolio web, mobile app, dashboard operasional, dan Computer Vision.",
+    images: ["/images/profile_2.jpg"],
   },
 };
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="!scroll-smooth">
+    <html lang="id" className="!scroll-smooth">
       <body
-        className={`${inter.className} bg-gray-50 text-gray-950 relative pt-10 md:pt-36 dark:bg-gray-900 dark:text-gray-50 dark:text-opacity-90`}
+        className="relative bg-gray-50/95 pt-10 font-sans text-gray-950 md:pt-36 dark:bg-[#0d0d1a] dark:text-gray-50 dark:text-opacity-90 transition-colors duration-300"
       >
-        <div className="bg-cyan-500 absolute top-[-6rem] -z-10 right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] dark:bg-[#946263]"></div>
-        <div className="bg-[#dbd7fb] absolute top-[-1rem] -z-10 left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] dark:bg-[#676394]"></div>
-        {/* <div className="bg-[#fbe2e3] absolute bottom-[-6rem] -z-10 left-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] dark:bg-[#946263]"></div>
-        <div className="bg-[#dbd7fb] absolute bottom-[-1rem] -z-10 right-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:right-[-33rem] lg:right-[-28rem] xl:right-[-15rem] 2xl:right-[-5rem] dark:bg-[#676394]"></div> */}
-
         <ThemeContextProvider>
           <ActiveSectionContextProvider>
             <Header />
@@ -102,6 +85,7 @@ export default function RootLayout({
 
             <Toaster position="top-right" />
             <ThemeSwitch />
+            <AMAIMascot />
           </ActiveSectionContextProvider>
         </ThemeContextProvider>
         <Analytics />

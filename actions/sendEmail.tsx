@@ -11,6 +11,12 @@ export const sendEmail = async (dataForm: any) => {
   const senderEmail = dataForm.senderEmail;
   const message = dataForm.message;
 
+  if (!process.env.RESEND_API_KEY) {
+    return {
+      error: "Fitur pengiriman email sedang tidak aktif (RESEND_API_KEY belum dikonfigurasi).",
+    };
+  }
+
   // simple server-side validation
   if (!validateString(senderEmail, 500)) {
     return {

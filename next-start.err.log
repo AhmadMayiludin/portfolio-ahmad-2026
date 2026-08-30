@@ -1,0 +1,7 @@
+- [33mwarn[39m [1mYou have enabled experimental feature (serverActions) in next.config.js.[22m
+- [33mwarn[39m Experimental features are not covered by semver, and may cause unexpected or broken application behavior. Use at your own risk.
+
+(node:15100) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[33m[1mWarning: [22m[39mFor production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'yarn add sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production

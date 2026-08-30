@@ -18,7 +18,7 @@ export default function Experience() {
 
   return (
     <div className="mb-28 sm:mb-40">
-      <section id="experience" ref={ref} className="scroll-mt-28">
+      <section className="scroll-mt-28">
         <SectionHeading>Pengalaman Kepanitiaan</SectionHeading>
       </section>
       <VerticalTimeline lineColor="">

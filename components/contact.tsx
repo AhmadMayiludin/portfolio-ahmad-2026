@@ -17,7 +17,7 @@ export default function Contact() {
     <motion.section
       id="contact"
       ref={ref}
-      className="scroll-mt-28 mb-20 sm:mb-28 w-[min(100%,38rem)] text-center"
+      className="mb-20 w-[min(100%,38rem)] scroll-mt-28 text-center sm:mb-28"
       initial={{
         opacity: 0,
       }}
@@ -31,69 +31,55 @@ export default function Contact() {
         once: true,
       }}
     >
-      <div className="bg-[#fbe2e3] absolute bottom-[-6rem] -z-10 right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] dark:bg-[#7d5353]"></div>
+      <div className="absolute bottom-[-6rem] right-[11rem] -z-10 h-[31.25rem] w-[31.25rem] rounded-full bg-[#fbe2e3] blur-[10rem] sm:w-[68.75rem] dark:bg-[#7d5353]"></div>
 
       <SectionHeading>Hubungi Saya</SectionHeading>
 
-      <p className="text-gray-700 -mt-6 dark:text-white/80">
-        Saat ini saya terbuka untuk kesempatan freelance atau pekerjaan paruh waktu. Jika Anda memiliki proyek menarik atau membutuhkan bantuan, jangan ragu untuk menghubungi saya.
-        <br />
-        <br />
-        Silakan hubungi saya kapan pun Anda membutuhkan bantuan atau ingin berdiskusi. Saya siap membantu dengan senang hati.
-
- 🚀
+      <p className="-mt-6 text-gray-700 dark:text-white/80">
+        Saya terbuka untuk kesempatan kerja, magang, freelance, atau kolaborasi
+        project di bidang web development, mobile app, dashboard, dan software
+        engineering.
       </p>
 
       <form
         className="mt-10 flex flex-col dark:text-black"
-        action={async (formData) => {
-          const dataForm = { senderEmail: email, message: message };
+        action={async () => {
+          const trimmedEmail = email.trim();
+          const trimmedMessage = message.trim();
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-          if (email == "") {
-            toast.error("Email is Required !");
+          if (!trimmedEmail) {
+            toast.error("Email wajib diisi.");
             return;
           }
 
-          if (message == "") {
-            toast.error("Message is Required !");
+          if (!emailRegex.test(trimmedEmail)) {
+            toast.error("Masukkan alamat email yang valid.");
             return;
           }
 
-          const containsTest = /test/i.test(email);
-          // || /test/i.test(message);
-
-          if (containsTest) {
-            toast.error(
-              "Mohon maaf, input tidak valid. Harap berikan email dan pesan yang benar.\n\nWesbite sudah berjalan dengan baik jadi tidak perlu testing lagi 😁",
-              {
-                duration: 6000,
-              }
-            );
+          if (trimmedMessage.length < 10) {
+            toast.error("Pesan minimal 10 karakter.");
             return;
           }
-          const isValidEmail =
-            email.length > 4 &&
-            message.length > 9 &&
-            email.endsWith("@gmail.com");
 
-          if (!isValidEmail) {
-            toast.error(
-              "Please provide a valid email (minimum 5 characters, ending with @gmail.com) and message minimum 10 characters."
-            );
-            return;
-          }
-          const { data, error } = await sendEmail(dataForm);
+          const { error } = await sendEmail({
+            senderEmail: trimmedEmail,
+            message: trimmedMessage,
+          });
+
           if (error) {
             toast.error(error);
             return;
           }
+
           setEmail("");
           setMessage("");
-          toast.success("Email sent successfully!");
+          toast.success("Pesan berhasil dikirim.");
         }}
       >
         <input
-          className="h-14 px-4 bg-white rounded-lg borderBlack dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
+          className="h-14 rounded-lg bg-white px-4 transition-all borderBlack dark:bg-white dark:bg-opacity-80 dark:outline-none dark:focus:bg-opacity-100"
           name="senderEmail"
           type="email"
           required
@@ -103,7 +89,7 @@ export default function Contact() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <textarea
-          className="h-40 bg-white my-3 rounded-lg borderBlack p-4 dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
+          className="my-3 h-40 rounded-lg bg-white p-4 transition-all borderBlack dark:bg-white dark:bg-opacity-80 dark:outline-none dark:focus:bg-opacity-100"
           name="message"
           placeholder="Pesan Anda"
           required
