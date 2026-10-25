@@ -22,7 +22,7 @@ interface Project {
 }
 
 const ProjectSection: React.FC = () => {
-  const { ref } = useSectionInView("Projects", 0.5);
+  const { ref } = useSectionInView("Projects");
   const [sectionRef, inView] = useInView({
     triggerOnce: true,
   });

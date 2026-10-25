@@ -8,15 +8,18 @@ export default function SubmitBtn() {
   return (
     <button
       type="submit"
-      className="group flex items-center justify-center gap-2 h-[3rem] w-[8rem] bg-gray-900 text-white rounded-full outline-none transition-all focus:scale-110 hover:scale-110 hover:bg-gray-950 active:scale-105 dark:bg-white dark:bg-opacity-10 disabled:scale-100 disabled:bg-opacity-65"
+      className="btn-ink group h-12 w-full disabled:cursor-not-allowed disabled:opacity-60"
       disabled={pending}
     >
       {pending ? (
-        <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+        <>
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent" />
+          Mengirim...
+        </>
       ) : (
         <>
-          Submit{" "}
-          <FaPaperPlane className="text-xs opacity-70 transition-all group-hover:translate-x-1 group-hover:-translate-y-1" />{" "}
+          Kirim Pesan
+          <FaPaperPlane className="text-[0.65rem] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </>
       )}
     </button>

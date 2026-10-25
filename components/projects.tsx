@@ -8,7 +8,7 @@ import { useSectionInView } from "@/lib/hooks";
 import BurstBload2 from "./burst-bload-2";
 
 export default function Projects() {
-  const { ref } = useSectionInView("Projects", 0.5);
+  const { ref } = useSectionInView("Projects");
 
   return (
     <section id="projects" ref={ref} className="scroll-mt-28 mb-28">

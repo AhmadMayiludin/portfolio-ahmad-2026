@@ -19,26 +19,32 @@ import mcSekolahPasarModalImg3 from "@/public/images/kegiatan/spm3.jpg";
 export const links = [
   {
     name: "Home",
+    label: "Home",
     hash: "#home",
   },
   {
-    name: "About",
-    hash: "#about",
-  },
-  {
     name: "Projects",
+    label: "Work",
     hash: "#projects",
   },
   {
     name: "Skills",
+    label: "What I Can Do",
     hash: "#skills",
   },
   {
+    name: "About",
+    label: "About",
+    hash: "#about",
+  },
+  {
     name: "Experience",
+    label: "Experience",
     hash: "#experience",
   },
   {
     name: "Contact",
+    label: "Contact",
     hash: "#contact",
   },
 ] as const;
@@ -434,51 +440,63 @@ export const projectsData = [
 export const skills = [
   {
     id: 1,
+    name: "HTML",
     imgUrl: "/images/icon/html.svg",
   },
   {
     id: 2,
+    name: "CSS",
     imgUrl: "/images/icon/css.svg",
   },
   {
     id: 3,
+    name: "PHP",
     imgUrl: "https://upload.wikimedia.org/wikipedia/commons/2/27/PHP-logo.svg",
   },
   {
     id: 4,
+    name: "Python",
     imgUrl: "/images/icon/python.svg",
   },
   {
     id: 5,
+    name: "MySQL",
     imgUrl: "/images/icon/mysql.svg",
   },
   {
     id: 6,
+    name: "Laravel",
     imgUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9a/Laravel.svg",
   },
   {
     id: 7,
+    name: "Ionic",
     imgUrl: "/images/icon/ionic.svg",
   },
   {
     id: 8,
+    name: "Bootstrap",
     imgUrl: "/images/icon/bootstrap.svg",
   },
   {
     id: 9,
+    name: "Tailwind CSS",
     imgUrl:
       "https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg",
   },
   {
     id: 10,
+    name: "Figma",
     imgUrl: "/images/icon/figma.svg",
   },
   {
     id: 11,
+    name: "Canva",
     imgUrl: "/images/icon/canva.svg",
   },
   {
     id: 12,
+    name: "Git",
     imgUrl: "/images/icon/git.svg",
   },
 ] as const;
@@ -487,7 +505,7 @@ export const inDevelopmentProjects = [
   {
     title: "Portfolio Website v2",
     description:
-      "Versi terbaru portfolio pribadi dengan fitur maskot AI interaktif, section project in-development, redesain visual premium biru-ungu, dan integrasi AI guide via 9router.",
+      "Versi terbaru portfolio pribadi dengan fitur maskot AI interaktif, section project in-development, redesain visual monokrom bergaya tipografi, dan integrasi AI guide via 9router.",
     progress: 75,
     tech: [
       "https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg",
@@ -497,7 +515,7 @@ export const inDevelopmentProjects = [
     ],
     expectedDate: "September 2026",
     features: [
-      "Redesain visual dengan gradien biru-ungu premium.",
+      "Redesain visual monokrom dengan hero nama outline dan galeri project 3D.",
       "Maskot AI 'AMAI' yang interaktif dan scroll-aware.",
       "Section khusus project yang sedang dikembangkan.",
       "Integrasi AI chat via 9router endpoint.",

@@ -2,13 +2,27 @@ import Header from "@/components/header";
 import "./globals.css";
 import ActiveSectionContextProvider from "@/context/active-section-context";
 import Footer from "@/components/footer";
-import ThemeSwitch from "@/components/theme-switch";
 import ThemeContextProvider from "@/context/theme-context";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import AMAIMascot from "@/components/amai-mascot";
+import MotionProvider from "@/components/motion-provider";
+import WavyBackground from "@/components/wavy-background";
+import { Inter, JetBrains_Mono } from "next/font/google";
+
+const fontSans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const fontMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -73,19 +87,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className="!scroll-smooth">
-      <body
-        className="relative bg-gray-50/95 pt-10 font-sans text-gray-950 md:pt-36 dark:bg-[#0d0d1a] dark:text-gray-50 dark:text-opacity-90 transition-colors duration-300"
-      >
+    <html lang="id" className={`${fontSans.variable} ${fontMono.variable} !scroll-smooth`}>
+      <body className="relative overflow-x-hidden bg-page font-sans text-ink antialiased transition-colors duration-500">
         <ThemeContextProvider>
           <ActiveSectionContextProvider>
-            <Header />
-            {children}
-            <Footer />
+            <MotionProvider>
+              <WavyBackground />
+              <Header />
+              {children}
+              <Footer />
 
-            <Toaster position="top-right" />
-            <ThemeSwitch />
-            <AMAIMascot />
+              <Toaster
+                position="top-center"
+                toastOptions={{
+                  className:
+                    "!rounded-xl !border !border-ink/10 !bg-surface !text-sm !text-ink !shadow-lg",
+                }}
+              />
+              <AMAIMascot />
+            </MotionProvider>
           </ActiveSectionContextProvider>
         </ThemeContextProvider>
         <Analytics />

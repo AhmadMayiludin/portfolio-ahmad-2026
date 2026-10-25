@@ -1,70 +1,105 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { links } from "@/lib/data";
 import Link from "next/link";
 import clsx from "clsx";
 import { useActiveSectionContext } from "@/context/active-section-context";
 import MobileHeader from "./mobile-header";
+import ThemeSwitch from "./theme-switch";
+import LogoMark from "./logo-mark";
+
+// Home lewat logo, Contact lewat tombol "Hire Me"
+const navLinks = links.filter((l) => l.name !== "Home" && l.name !== "Contact");
 
 export default function Header() {
   const { activeSection, setActiveSection, setTimeOfLastClick } =
     useActiveSectionContext();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const go = (name: (typeof links)[number]["name"]) => {
+    setActiveSection(name);
+    setTimeOfLastClick(Date.now());
+  };
 
   return (
-    <header className="z-[999] relative">
-      <div>
-        <MobileHeader />
-      </div>
+    <header className="relative z-[999]">
+      <MobileHeader scrolled={scrolled} />
 
       <motion.div
-        className="hidden md:block fixed top-0 left-1/2 h-[4.5rem] w-full rounded-none border border-white border-opacity-40 bg-white bg-opacity-50 shadow-lg shadow-black/[0.03] backdrop-blur-[0.5rem] sm:top-6 sm:h-[3.25rem] sm:w-[36rem] sm:rounded-full dark:bg-gray-950 dark:border-black/40 dark:bg-opacity-40"
-        initial={{ y: -100, x: "-50%", opacity: 0 }}
-        animate={{ y: 0, x: "-50%", opacity: 1 }}
-      ></motion.div>
+        className="fixed inset-x-0 top-5 hidden px-6 md:block"
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.2 }}
+      >
+        <div
+          className={clsx(
+            "mx-auto flex max-w-5xl items-center justify-between rounded-2xl border px-3 py-2.5 backdrop-blur-xl transition duration-300",
+            scrolled
+              ? "border-ink/10 bg-surface/80 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
+              : "border-ink/[0.06] bg-surface/70"
+          )}
+        >
+          <Link
+            href="#home"
+            onClick={() => go("Home")}
+            className="flex items-center gap-3 pl-1"
+          >
+            <LogoMark />
+            <span className="text-[0.72rem] font-bold uppercase tracking-[0.24em]">
+              Ahmad
+            </span>
+          </Link>
 
-      <nav className="hidden md:block fixed top-[0.15rem] left-1/2 h-12 -translate-x-1/2 py-2 sm:top-[1.7rem] sm:h-[initial] sm:py-0">
-        <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-gray-500 sm:w-[initial] sm:flex-nowrap sm:gap-5">
-          {links.map((link) => (
-            <motion.li
-              className="h-3/4 flex items-center justify-center relative"
-              key={link.hash}
-              initial={{ y: -100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+          <nav>
+            <ul className="flex items-center gap-1 lg:gap-3">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.name;
+                return (
+                  <li key={link.hash}>
+                    <Link
+                      href={link.hash}
+                      onClick={() => go(link.name)}
+                      className={clsx(
+                        "relative block px-3 py-2 text-[0.68rem] font-medium uppercase tracking-[0.2em] transition-colors",
+                        isActive ? "text-ink" : "text-muted hover:text-ink"
+                      )}
+                    >
+                      {link.label}
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-underline"
+                          className="absolute inset-x-3 -bottom-0.5 h-px bg-ink"
+                          transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                        />
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          <div className="flex items-center gap-2">
+            <ThemeSwitch />
+            <Link
+              href="#contact"
+              onClick={() => go("Contact")}
+              className="rounded-xl border border-ink px-4 py-2 text-[0.72rem] font-semibold transition hover:bg-ink hover:text-invert"
             >
-              <Link
-                className={clsx(
-                  "flex w-full items-center justify-center px-3 py-3 hover:text-gray-950 transition dark:text-gray-500 dark:hover:text-gray-300",
-                  {
-                    "text-gray-950 dark:text-white":
-                      activeSection === link.name,
-                  }
-                )}
-                href={link.hash}
-                onClick={() => {
-                  setActiveSection(link.name);
-                  setTimeOfLastClick(Date.now());
-                }}
-              >
-                {link.name}
-
-                {link.name === activeSection && (
-                  <motion.span
-                    // className="bg-white bg-opacity-40 dark:bg-opacity-40 rounded-full absolute inset-0 -z-10 dark:bg-gray-800"
-                    layoutId="activeSection"
-                    transition={{
-                      type: "spring",
-                      stiffness: 380,
-                      damping: 30,
-                    }}
-                  ></motion.span>
-                )}
-              </Link>
-            </motion.li>
-          ))}
-        </ul>
-      </nav>
+              Hire Me
+            </Link>
+          </div>
+        </div>
+      </motion.div>
     </header>
   );
 }

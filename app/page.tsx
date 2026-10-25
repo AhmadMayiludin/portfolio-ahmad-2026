@@ -1,11 +1,10 @@
 import About from "@/components/about";
 import Contact from "@/components/contact";
+import CtaSection from "@/components/cta-section";
 import Experience from "@/components/experience";
-import WorkExperience from "@/components/work-experience";
 import Intro from "@/components/intro";
 import ProjectSection from "@/components/project-section";
 import InDevelopmentSection from "@/components/in-development-section";
-import SectionDivider from "@/components/section-divider";
 import Skills from "@/components/skills";
 import MaintenanceMode from "../components/MaintenanceMode";
 
@@ -17,15 +16,14 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-col items-center px-4">
+    <main>
       <Intro />
-      <SectionDivider />
-      <About />
       <ProjectSection />
       <InDevelopmentSection />
       <Skills />
-      <WorkExperience />
+      <About />
       <Experience />
+      <CtaSection />
       <Contact />
     </main>
   );

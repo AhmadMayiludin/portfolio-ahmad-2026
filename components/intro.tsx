@@ -1,128 +1,120 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { BsArrowRight, BsInstagram, BsLinkedin } from "react-icons/bs";
-import { HiDownload } from "react-icons/hi";
-import { FaGithubSquare } from "react-icons/fa";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
 
+const NAME = "AHMAD MAYILUDIN";
+
 export default function Intro() {
-  const { ref } = useSectionInView("Home", 0.5);
+  const { ref } = useSectionInView("Home");
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const photoY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const nameY = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <section
       id="home"
       ref={ref}
-      className="mb-28 max-w-[54rem] scroll-mt-[50rem] text-center sm:mb-0"
+      className="relative scroll-mt-[100rem]"
     >
-      <motion.div
-        className="flex items-center justify-center"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: "tween", duration: 0.2 }}
+      <div
+        ref={sectionRef}
+        className="relative h-[100svh] min-h-[560px] overflow-hidden"
       >
-        <div className="relative">
-          {/* Glow ring */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-500 opacity-40 blur-lg" />
-          <Image
-            src="/images/profile_2.jpg"
-            alt="Ahmad Mayiludin"
-            width="192"
-            height="192"
-            quality="95"
-            priority={true}
-            className="relative h-40 w-40 rounded-full border-4 border-white object-cover shadow-2xl"
-          />
+        {/* Nama outline berjalan di belakang foto */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-[44%] -translate-y-1/2 select-none md:top-[40%]"
+        >
+          <motion.div style={{ y: nameY, opacity: fade }}>
+            <div className="flex w-max animate-marquee">
+              {[0, 1, 2, 3].map((i) => (
+                <span
+                  key={i}
+                  className="text-outline whitespace-nowrap pr-[0.35em] text-[clamp(5.5rem,24vw,17rem)] font-semibold leading-none tracking-[-0.02em]"
+                >
+                  {NAME}
+                </span>
+              ))}
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
 
-      <motion.h1
-        className="mb-5 mt-5 px-4 text-3xl font-bold !leading-[1.2] sm:text-5xl"
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <span className="gradient-text">Ahmad Mayiludin</span>
-      </motion.h1>
-      <motion.p
-        className="mx-auto mb-10 max-w-3xl px-4 text-lg !leading-[1.7] text-gray-700 dark:text-white/80 sm:text-xl"
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        Junior Full Stack & Mobile Developer yang membangun aplikasi web,
-        dashboard operasional, aplikasi mobile Ionic Angular, dan solusi
-        Computer Vision. Terbuka untuk kesempatan kerja di bidang web/mobile
-        development, frontend, backend, dan software engineering.
-      </motion.p>
-      <motion.div
-        className="flex flex-col items-center justify-center gap-3 px-4 text-lg font-medium sm:flex-row"
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <Link
+        {/* Foto tanpa background */}
+        <motion.div
+          className="absolute bottom-0 left-1/2 h-[66svh] md:h-[82svh]"
+          style={{ x: "-50%", y: photoY }}
+        >
+          <motion.div
+            className="h-full"
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Image
+              src="/images/profile-cutout.png"
+              alt="Ahmad Mayiludin"
+              width={569}
+              height={858}
+              priority
+              quality={95}
+              sizes="(min-width: 768px) 560px, 70vw"
+              className="h-full w-auto max-w-none object-contain [-webkit-mask-image:linear-gradient(to_right,transparent,#000_14%,#000_86%,transparent)] [mask-image:linear-gradient(to_right,transparent,#000_14%,#000_86%,transparent)]"
+            />
+          </motion.div>
+        </motion.div>
+
+        {/* Info kiri bawah */}
+        <motion.div
+          className="absolute bottom-8 left-5 z-10 hidden max-w-xs md:left-10 md:block"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+        >
+          <p className="mono-label !text-ink">Junior Full Stack</p>
+          <p className="mono-label mt-1 !text-ink">&amp; Mobile Developer</p>
+          <p className="mt-4 flex items-center gap-2 text-xs text-muted">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink opacity-40" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-ink" />
+            </span>
+            Terbuka untuk kesempatan kerja
+          </p>
+        </motion.div>
+
+        {/* Scroll down vertikal */}
+        <motion.a
           href="#projects"
-          className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-7 py-3 text-base text-white shadow-lg shadow-indigo-500/30 outline-none transition hover:scale-105 hover:shadow-indigo-500/50 focus:scale-105 active:scale-100"
+          aria-label="Scroll ke bawah"
+          className="absolute right-5 top-[42%] z-10 hidden flex-col items-center gap-3 md:right-10 md:flex"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
         >
-          Lihat Projects
-          <BsArrowRight className="opacity-80 transition group-hover:translate-x-1" />
-        </Link>
+          <span className="relative h-14 w-px overflow-hidden bg-ink/15">
+            <span className="absolute inset-0 animate-scroll-line bg-ink" />
+          </span>
+          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-muted [writing-mode:vertical-rl]">
+            Scroll Down
+          </span>
+        </motion.a>
+      </div>
 
-        <a
-          className="group flex cursor-pointer items-center gap-2 rounded-full border border-indigo-200/60 bg-white/80 px-7 py-3 text-base text-gray-800 shadow-sm backdrop-blur-sm outline-none transition hover:scale-105 hover:border-indigo-400/60 hover:shadow-indigo-200/40 focus:scale-105 active:scale-100 dark:bg-white/10 dark:text-white dark:border-white/20 dark:hover:border-indigo-400/40"
-          href="/cv/resume.pdf"
-          download
-        >
-          Download CV
-          <HiDownload className="opacity-70 transition group-hover:translate-y-1" />
-        </a>
-
-        <Link
-          href="#contact"
-          className="flex items-center gap-2 rounded-full border border-indigo-200/60 bg-white/80 px-7 py-3 text-base text-gray-800 shadow-sm backdrop-blur-sm outline-none transition hover:scale-105 hover:border-indigo-400/60 focus:scale-105 active:scale-100 dark:bg-white/10 dark:text-white dark:border-white/20"
-        >
-          Hubungi Saya
-        </Link>
-      </motion.div>
-      <motion.div
-        className="mt-5 flex flex-row items-center justify-center gap-2 px-4 text-lg font-medium"
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          delay: 0.1,
-        }}
-      >
-        <a
-          className="flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-gray-700 transition hover:scale-[1.12] hover:text-gray-950 focus:scale-[1.12] active:scale-100 borderBlack dark:bg-white/10 dark:text-white/60"
-          href="https://www.linkedin.com/in/ahmad-mayiludin-462371250/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn Ahmad Mayiludin"
-        >
-          <BsLinkedin />
-        </a>
-
-        <a
-          className="flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-[1.35rem] text-gray-700 transition hover:scale-[1.12] hover:text-gray-950 focus:scale-[1.12] active:scale-100 borderBlack dark:bg-white/10 dark:text-white/60"
-          href="https://github.com/AhmadMayiludin"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub Ahmad Mayiludin"
-        >
-          <FaGithubSquare />
-        </a>
-        <a
-          className="flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-[1.35rem] text-gray-700 transition hover:scale-[1.12] hover:text-gray-950 focus:scale-[1.12] active:scale-100 borderBlack dark:bg-white/10 dark:text-white/60"
-          href="https://www.instagram.com/ahmadmayiludin"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram Ahmad Mayiludin"
-        >
-          <BsInstagram />
-        </a>
-      </motion.div>
+      {/* Info versi HP */}
+      <div className="container-page -mt-px border-t border-ink/10 py-5 md:hidden">
+        <p className="mono-label !text-ink">Junior Full Stack &amp; Mobile Developer</p>
+        <p className="mt-2 flex items-center gap-2 text-xs text-muted">
+          <span className="h-1.5 w-1.5 rounded-full bg-ink" />
+          Terbuka untuk kesempatan kerja
+        </p>
+      </div>
     </section>
   );
 }
