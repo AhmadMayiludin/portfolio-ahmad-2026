@@ -8,13 +8,28 @@ import { useActiveSectionContext } from "@/context/active-section-context";
 import ThemeSwitch from "./theme-switch";
 import LogoMark from "./logo-mark";
 
-export default function MobileHeader({ scrolled }: { scrolled: boolean }) {
+export default function MobileHeader({
+  scrolled,
+  visible,
+}: {
+  scrolled: boolean;
+  visible: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const { activeSection, setActiveSection, setTimeOfLastClick } =
     useActiveSectionContext();
+  const shown = visible || open;
 
   return (
-    <div className="fixed inset-x-0 top-0 z-[999] px-3 pt-3 md:hidden">
+    <motion.div
+      className={clsx(
+        "fixed inset-x-0 top-0 z-[999] px-3 pt-3 md:hidden",
+        !shown && "pointer-events-none"
+      )}
+      initial={false}
+      animate={shown ? { y: 0, opacity: 1 } : { y: -90, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 220, damping: 26 }}
+    >
       <div
         className={clsx(
           "flex items-center justify-between rounded-2xl border px-3 py-2 backdrop-blur-xl transition",
@@ -92,6 +107,6 @@ export default function MobileHeader({ scrolled }: { scrolled: boolean }) {
           </motion.nav>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }

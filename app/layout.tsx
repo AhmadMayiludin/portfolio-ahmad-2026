@@ -88,7 +88,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${fontSans.variable} ${fontMono.variable} !scroll-smooth`}>
-      <body className="relative overflow-x-hidden bg-page font-sans text-ink antialiased transition-colors duration-500">
+      <body className="relative overflow-x-hidden bg-page font-sans text-ink antialiased">
         <ThemeContextProvider>
           <ActiveSectionContextProvider>
             <MotionProvider>

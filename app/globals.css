@@ -12,6 +12,9 @@
   --muted: 92 92 100;
   --invert: 250 250 250;
   --line-color: rgba(12, 12, 14, 0.1);
+  /* Aksen tipis khusus halaman pertama */
+  --hero-accent: 205 140 100;
+  --hero-line: 236 196 168;
 }
 
 html.dark {
@@ -21,6 +24,15 @@ html.dark {
   --muted: 150 150 160;
   --invert: 12 12 14;
   --line-color: rgba(255, 255, 255, 0.1);
+  --hero-accent: 168 62 62;
+  --hero-line: 92 30 30;
+}
+
+/* Transisi tema berbentuk lingkaran (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 ::selection {

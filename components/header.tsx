@@ -17,9 +17,14 @@ export default function Header() {
   const { activeSection, setActiveSection, setTimeOfLastClick } =
     useActiveSectionContext();
   const [scrolled, setScrolled] = useState(false);
+  // Navbar disembunyikan selama masih di halaman pertama
+  const [onHero, setOnHero] = useState(true);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      setOnHero(window.scrollY < window.innerHeight * 0.7);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -32,13 +37,16 @@ export default function Header() {
 
   return (
     <header className="relative z-[999]">
-      <MobileHeader scrolled={scrolled} />
+      <MobileHeader scrolled={scrolled} visible={!onHero} />
 
       <motion.div
-        className="fixed inset-x-0 top-5 hidden px-6 md:block"
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 180, damping: 22, delay: 0.2 }}
+        className={clsx(
+          "fixed inset-x-0 top-5 hidden px-6 md:block",
+          onHero && "pointer-events-none"
+        )}
+        initial={{ y: -100, opacity: 0 }}
+        animate={onHero ? { y: -100, opacity: 0 } : { y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 220, damping: 26 }}
       >
         <div
           className={clsx(

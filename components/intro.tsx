@@ -1,120 +1,148 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
+import { HiOutlineAcademicCap } from "react-icons/hi2";
+import { BsMoonFill, BsSunFill } from "react-icons/bs";
 import { useSectionInView } from "@/lib/hooks";
+import { useTheme } from "@/context/theme-context";
+import { revealOrigin, toggleThemeWithReveal } from "@/lib/theme-transition";
+import PhotoReveal from "./photo-reveal";
 
-const NAME = "AHMAD MAYILUDIN";
+const ease: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+function HeroDivider({ text, delay = 0 }: { text: string; delay?: number }) {
+  return (
+    <div className="flex items-center justify-center gap-4 px-5">
+      <motion.span
+        className="h-px w-full max-w-[22rem] origin-right bg-gradient-to-r from-transparent to-[rgb(var(--hero-line))]"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 1.1, delay, ease }}
+      />
+      <motion.span
+        className="shrink-0 whitespace-nowrap font-mono text-[0.52rem] uppercase tracking-[0.45em] text-[rgb(var(--hero-accent))] sm:text-[0.58rem]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: delay + 0.4 }}
+      >
+        {text}
+      </motion.span>
+      <motion.span
+        className="h-px w-full max-w-[22rem] origin-left bg-gradient-to-l from-transparent to-[rgb(var(--hero-line))]"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 1.1, delay, ease }}
+      />
+    </div>
+  );
+}
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const dark = theme === "dark";
+
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={dark}
+      aria-label="Ganti tema terang/gelap"
+      onClick={(e) => {
+        const { x, y } = revealOrigin(e);
+        toggleThemeWithReveal(toggleTheme, x, y);
+      }}
+      className="relative flex h-[1.15rem] w-9 items-center rounded-full bg-ink/15 px-[3px] transition hover:bg-ink/25 dark:bg-ink/25 dark:hover:bg-ink/35"
+    >
+      <motion.span
+        className="flex h-3 w-3 items-center justify-center text-[0.62rem] text-ink"
+        animate={{ x: dark ? 18 : 0 }}
+        transition={{ type: "spring", stiffness: 500, damping: 32 }}
+      >
+        {dark ? <BsMoonFill /> : <BsSunFill />}
+      </motion.span>
+    </button>
+  );
+}
+
+const fadeUp = (delay: number) => ({
+  initial: { opacity: 0, y: 18 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, delay, ease },
+});
 
 export default function Intro() {
   const { ref } = useSectionInView("Home");
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const photoY = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const nameY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <section
       id="home"
       ref={ref}
-      className="relative scroll-mt-[100rem]"
+      className="relative flex min-h-[100svh] scroll-mt-[100rem] flex-col justify-between bg-white py-6 dark:bg-black"
     >
-      <div
-        ref={sectionRef}
-        className="relative h-[100svh] min-h-[560px] overflow-hidden"
-      >
-        {/* Nama outline berjalan di belakang foto */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 top-[44%] -translate-y-1/2 select-none md:top-[40%]"
+      <HeroDivider text="Ahmad Mayiludin || Portfolio 2026" />
+
+      <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-10 px-6 py-16 md:flex-row md:items-center md:gap-14">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.15, ease }}
         >
-          <motion.div style={{ y: nameY, opacity: fade }}>
-            <div className="flex w-max animate-marquee">
-              {[0, 1, 2, 3].map((i) => (
-                <span
-                  key={i}
-                  className="text-outline whitespace-nowrap pr-[0.35em] text-[clamp(5.5rem,24vw,17rem)] font-semibold leading-none tracking-[-0.02em]"
-                >
-                  {NAME}
-                </span>
-              ))}
-            </div>
+          <PhotoReveal />
+        </motion.div>
+
+        <div className="text-center md:text-left">
+          <motion.h1
+            {...fadeUp(0.3)}
+            className="font-mono text-[2rem] font-bold leading-tight tracking-[-0.02em] text-ink sm:text-[2.6rem] lg:text-[3rem]"
+          >
+            Ahmad Mayiludin
+          </motion.h1>
+
+          <motion.p
+            {...fadeUp(0.42)}
+            className="mt-4 font-mono text-[0.62rem] uppercase tracking-[0.42em] text-muted sm:text-[0.68rem]"
+          >
+            Junior Full Stack &amp; Mobile Developer
+          </motion.p>
+
+          <motion.p
+            {...fadeUp(0.5)}
+            className="mt-3 flex items-center justify-center gap-1.5 font-mono text-[0.68rem] text-muted md:justify-start"
+          >
+            <HiOutlineAcademicCap className="text-sm" />
+            Universitas Buana Perjuangan Karawang
+          </motion.p>
+
+          <motion.div
+            {...fadeUp(0.6)}
+            className="mt-8 flex flex-wrap items-center justify-center gap-3 md:justify-start"
+          >
+            <a
+              href="/cv/resume.pdf"
+              download
+              className="border border-ink bg-ink px-7 py-3 font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-invert transition hover:opacity-80"
+            >
+              Get Resume
+            </a>
+            <a
+              href="mailto:if23.ahmadmayiludin@mhs.ubpkarawang.ac.id"
+              className="border border-ink/25 px-7 py-3 font-mono text-[0.62rem] font-bold uppercase tracking-[0.22em] text-ink transition hover:border-ink"
+            >
+              Email Me
+            </a>
+          </motion.div>
+
+          <motion.div
+            {...fadeUp(0.7)}
+            className="mt-6 flex justify-center md:justify-start"
+          >
+            <ThemeToggle />
           </motion.div>
         </div>
-
-        {/* Foto tanpa background */}
-        <motion.div
-          className="absolute bottom-0 left-1/2 h-[66svh] md:h-[82svh]"
-          style={{ x: "-50%", y: photoY }}
-        >
-          <motion.div
-            className="h-full"
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Image
-              src="/images/profile-cutout.png"
-              alt="Ahmad Mayiludin"
-              width={569}
-              height={858}
-              priority
-              quality={95}
-              sizes="(min-width: 768px) 560px, 70vw"
-              className="h-full w-auto max-w-none object-contain [-webkit-mask-image:linear-gradient(to_right,transparent,#000_14%,#000_86%,transparent)] [mask-image:linear-gradient(to_right,transparent,#000_14%,#000_86%,transparent)]"
-            />
-          </motion.div>
-        </motion.div>
-
-        {/* Info kiri bawah */}
-        <motion.div
-          className="absolute bottom-8 left-5 z-10 hidden max-w-xs md:left-10 md:block"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-        >
-          <p className="mono-label !text-ink">Junior Full Stack</p>
-          <p className="mono-label mt-1 !text-ink">&amp; Mobile Developer</p>
-          <p className="mt-4 flex items-center gap-2 text-xs text-muted">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink opacity-40" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-ink" />
-            </span>
-            Terbuka untuk kesempatan kerja
-          </p>
-        </motion.div>
-
-        {/* Scroll down vertikal */}
-        <motion.a
-          href="#projects"
-          aria-label="Scroll ke bawah"
-          className="absolute right-5 top-[42%] z-10 hidden flex-col items-center gap-3 md:right-10 md:flex"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          <span className="relative h-14 w-px overflow-hidden bg-ink/15">
-            <span className="absolute inset-0 animate-scroll-line bg-ink" />
-          </span>
-          <span className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-muted [writing-mode:vertical-rl]">
-            Scroll Down
-          </span>
-        </motion.a>
       </div>
 
-      {/* Info versi HP */}
-      <div className="container-page -mt-px border-t border-ink/10 py-5 md:hidden">
-        <p className="mono-label !text-ink">Junior Full Stack &amp; Mobile Developer</p>
-        <p className="mt-2 flex items-center gap-2 text-xs text-muted">
-          <span className="h-1.5 w-1.5 rounded-full bg-ink" />
-          Terbuka untuk kesempatan kerja
-        </p>
-      </div>
+      <HeroDivider text="Solving Problems Through Code" delay={0.3} />
     </section>
   );
 }
